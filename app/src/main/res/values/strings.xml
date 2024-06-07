@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Share Task App</string>
+    <string name="title_home">Class</string>
+    <string name="class_detail_label">Dashboard</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_calendar">Calendar</string>
+    <string name="title_notifications">Notifications</string>
+
+    <string name="time_remaining">%1$d days %2$d hours remaining</string>
+    <string name="update_title">Update</string>
+    <string name="edit_title">Edit</string>
+    <string name="delete_title">Delete</string>
+
+    <string name="delete_class_confirmation_title">Delete Class</string>
+    <string name="delete_class_confirmation_message">Apakah Anda yakin ingin menghapus kelas ini?</string>
+    <string name="delete_task_confirmation_title">Delete Task</string>
+    <string name="delete_task_confirmation_message">Apakah Anda yakin ingin menghapus task ini?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="calendar_content_description">Tanggal dengan deadline ditandai dengan lingkaran.</string>
+</resources>

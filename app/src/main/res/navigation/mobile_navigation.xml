@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.l0122138.ridlo.sharetaskapp.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_navigation_home_to_classDetailFragment"
+            app:destination="@id/classDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/classDetailFragment"
+        android:name="com.l0122138.ridlo.sharetaskapp.ui.home.ClassDetailFragment"
+        android:label="@string/class_detail_label"
+        tools:layout="@layout/fragment_class_detail">
+        <argument
+            android:name="classCode"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.l0122138.ridlo.sharetaskapp.ui.dashboard.DashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="com.l0122138.ridlo.sharetaskapp.ui.notifications.NotificationsFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/navigation_calendar"
+        android:name="com.l0122138.ridlo.sharetaskapp.ui.calendar.CalendarFragment"
+        android:label="@string/title_calendar"
+        tools:layout="@layout/fragment_calendar" />
+
+</navigation>
