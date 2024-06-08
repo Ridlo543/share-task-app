@@ -4,12 +4,13 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+//import android.view.Menu
+//import android.view.MenuInflater
+//import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.clans.fab.FloatingActionButton
 import com.github.clans.fab.FloatingActionMenu
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.textfield.TextInputEditText
@@ -36,8 +38,10 @@ class ClassDetailFragment : Fragment(), TaskAdapter.TaskActionListener {
     private lateinit var taskAdapter: TaskAdapter
     private lateinit var classDetailViewModel: ClassDetailViewModel
     private lateinit var taskDeadlineInput: TextInputEditText
+    private lateinit var toggleButton: MaterialButtonToggleGroup
     private var classCode: String? = null
     private var className: String? = null
+    private var showDoneTasks: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,10 +50,11 @@ class ClassDetailFragment : Fragment(), TaskAdapter.TaskActionListener {
         val view = inflater.inflate(R.layout.fragment_class_detail, container, false)
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_task, null)
         taskRecyclerView = view.findViewById(R.id.taskRecyclerView)
-        fabMenuTask = view.findViewById(R.id.fab_menu_task)
         fabAddTask = view.findViewById(R.id.fab_add_task)
+        fabMenuTask = view.findViewById(R.id.fab_menu_task)
         progressBarTask = view.findViewById(R.id.progressBarTask)
         taskDeadlineInput = dialogView.findViewById(R.id.task_deadline_input)
+        toggleButton = view.findViewById(R.id.toggleButton)
 
         taskDeadlineInput.setOnClickListener {
             showDateTimePicker(taskDeadlineInput)
@@ -63,10 +68,21 @@ class ClassDetailFragment : Fragment(), TaskAdapter.TaskActionListener {
             showAddTaskDialog()
         }
 
+        toggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+                showDoneTasks = when (checkedId) {
+                    R.id.button_done -> true
+                    R.id.button_not_done -> false
+                    else -> showDoneTasks
+                }
+                filterTasks()
+            }
+        }
+
         classDetailViewModel = ViewModelProvider(this)[ClassDetailViewModel::class.java]
 
-        classDetailViewModel.tasks.observe(viewLifecycleOwner) { tasks ->
-            taskAdapter.setData(tasks)
+        classDetailViewModel.tasks.observe(viewLifecycleOwner) {
+            filterTasks()
         }
 
         classDetailViewModel.loading.observe(viewLifecycleOwner) { isLoading ->
@@ -80,24 +96,82 @@ class ClassDetailFragment : Fragment(), TaskAdapter.TaskActionListener {
             classCode?.let { code -> classDetailViewModel.fetchTasks(code) }
         }
 
-        setHasOptionsMenu(true)
+//        @Suppress("DEPRECATION")
+//        setHasOptionsMenu(true)
+        handleOnBackPressed()
+
+        toggleButton.check(R.id.button_not_done)
+
         return view
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.class_item_menu, menu)
+    private fun handleOnBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().navigateUp()
+                }
+            })
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                findNavController().navigateUp()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
+    private fun filterTasks() {
+        val tasks = classDetailViewModel.tasks.value.orEmpty()
+        val filteredTasks = tasks.filter { it.isDone == showDoneTasks }
+        taskAdapter.setData(filteredTasks)
     }
+
+    override fun onEditTask(task: TaskData) {
+        showEditTaskDialog(task)
+    }
+
+    override fun onDeleteTask(taskId: String, position: Int) {
+        showDeleteConfirmationDialog(taskId, position)
+    }
+
+    override fun onMarkTaskAsDone(task: TaskData) {
+        val updatedTask = task.copy(isDone = true)
+        classDetailViewModel.updateTask(
+            task.id,
+            classCode ?: "",
+            updatedTask.name,
+            updatedTask.description,
+            updatedTask.deadline,
+            updatedTask.isDone
+        )
+    }
+
+    override fun onMarkTaskAsNotDone(task: TaskData) {
+        val updatedTask = task.copy(isDone = false)
+        classDetailViewModel.updateTask(
+            task.id,
+            classCode ?: "",
+            updatedTask.name,
+            updatedTask.description,
+            updatedTask.deadline,
+            updatedTask.isDone
+        )
+    }
+
+//    @Deprecated("Deprecated in Java")
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        @Suppress("DEPRECATION")
+//        super.onCreateOptionsMenu(menu, inflater)
+//        inflater.inflate(R.menu.class_item_menu, menu)
+//    }
+//
+//    @Deprecated("Deprecated in Java")
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        @Suppress("DEPRECATION")
+//        return when (item.itemId) {
+//            android.R.id.home -> {
+//                findNavController().navigateUp()
+//                true
+//            }
+//
+//            else -> super.onOptionsItemSelected(item)
+//        }
+//    }
 
     private fun showAddTaskDialog() {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_task, null)
@@ -143,7 +217,8 @@ class ClassDetailFragment : Fragment(), TaskAdapter.TaskActionListener {
                         date.set(Calendar.MINUTE, minute)
                         date.set(Calendar.SECOND, 0)
 
-                        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+                        val dateFormat =
+                            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
                         taskDeadlineInput.setText(dateFormat.format(date.time))
                     },
                     currentDateTime.get(Calendar.HOUR_OF_DAY),
@@ -155,14 +230,6 @@ class ClassDetailFragment : Fragment(), TaskAdapter.TaskActionListener {
             currentDateTime.get(Calendar.MONTH),
             currentDateTime.get(Calendar.DAY_OF_MONTH)
         ).show()
-    }
-
-    override fun onEditTask(task: TaskData) {
-        showEditTaskDialog(task)
-    }
-
-    override fun onDeleteTask(taskId: String, position: Int) {
-        showDeleteConfirmationDialog(taskId, position)
     }
 
     private fun showEditTaskDialog(task: TaskData) {
@@ -187,7 +254,14 @@ class ClassDetailFragment : Fragment(), TaskAdapter.TaskActionListener {
                 val description = taskDescriptionInput.text.toString()
                 val deadline = taskDeadlineInput.text.toString()
                 classCode?.let { code ->
-                    classDetailViewModel.updateTask(task.id, code, name, description, deadline)
+                    classDetailViewModel.updateTask(
+                        task.id,
+                        code,
+                        name,
+                        description,
+                        deadline,
+                        task.isDone
+                    )
                 }
                 dialog.dismiss()
             }
@@ -217,8 +291,4 @@ class ClassDetailFragment : Fragment(), TaskAdapter.TaskActionListener {
 
         dialog.show()
     }
-
-
-
-
 }

@@ -13,13 +13,11 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import com.l0122138.ridlo.sharetaskapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Initialize ThreeTenABP
         AndroidThreeTen.init(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -27,17 +25,24 @@ class MainActivity : AppCompatActivity() {
 
         val navView: BottomNavigationView = binding.navView
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         val navController: NavController = navHostFragment.navController
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_calendar, R.id.navigation_notifications
+                R.id.navigation_home,
+                R.id.navigation_calendar,
+                R.id.navigation_playground,
+                R.id.navigation_profile
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 }

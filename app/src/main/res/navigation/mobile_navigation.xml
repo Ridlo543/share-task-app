@@ -26,20 +26,20 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.l0122138.ridlo.sharetaskapp.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_playground"
+        android:name="com.l0122138.ridlo.sharetaskapp.ui.playground.PlaygroundFragment"
+        android:label="@string/title_playground"
+        tools:layout="@layout/fragment_playground" />
 
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.l0122138.ridlo.sharetaskapp.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
     <fragment
         android:id="@+id/navigation_calendar"
         android:name="com.l0122138.ridlo.sharetaskapp.ui.calendar.CalendarFragment"
         android:label="@string/title_calendar"
         tools:layout="@layout/fragment_calendar" />
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.l0122138.ridlo.sharetaskapp.ui.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile" />
 
 </navigation>

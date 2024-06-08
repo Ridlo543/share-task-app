@@ -14,7 +14,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface ApiService {
-//    class
+    //    Class Endpoints
     @GET("classes/{code}")
     fun getClassByCode(@Path("code") code: String): Call<ClassData>
 
@@ -27,7 +27,7 @@ interface ApiService {
     @DELETE("classes/{code}")
     fun deleteClass(@Path("code") code: String): Call<ResponseBody>
 
-//    Task
+    //    Task Endpoints
     @GET("classes/{code}/tasks")
     fun getTasksByClassCode(@Path("code") code: String): Call<List<TaskData>>
 

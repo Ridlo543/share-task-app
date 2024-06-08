@@ -54,6 +54,12 @@ class HomeFragment : Fragment(), ClassAdapter.OnClassActionListener {
             showCreateClassDialog()
         }
 
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         classViewModel = ViewModelProvider(this)[ClassViewModel::class.java]
 
         classViewModel.classes.observe(viewLifecycleOwner) { classes ->
@@ -64,11 +70,7 @@ class HomeFragment : Fragment(), ClassAdapter.OnClassActionListener {
             progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
-        if (savedInstanceState == null) {
-            classViewModel.fetchClasses()
-        }
-
-        return view
+        classViewModel.fetchClasses()
     }
 
     override fun onClassClicked(classData: ClassData) {
@@ -79,7 +81,8 @@ class HomeFragment : Fragment(), ClassAdapter.OnClassActionListener {
         val navController = findNavController()
         navController.graph.findNode(R.id.classDetailFragment)?.label = classNameLabel
 
-        val action = HomeFragmentDirections.actionNavigationHomeToClassDetailFragment(classData.code)
+        val action =
+            HomeFragmentDirections.actionNavigationHomeToClassDetailFragment(classData.code)
         navController.navigate(action)
     }
 
@@ -97,7 +100,7 @@ class HomeFragment : Fragment(), ClassAdapter.OnClassActionListener {
         builder.setPositiveButton("Add") { dialog, _ ->
             val classCode = inputEditText.text.toString()
             if (classCode.isNotEmpty()) {
-                classViewModel.createClass(classCode)
+                classViewModel.fetchClassByCode(classCode)
             } else {
                 inputLayout.error = "Class code cannot be empty"
             }
@@ -179,5 +182,4 @@ class HomeFragment : Fragment(), ClassAdapter.OnClassActionListener {
         }
         builder.show()
     }
-
 }

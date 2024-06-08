@@ -13,10 +13,10 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     val tasks: LiveData<List<TaskData>> get() = _tasks
 
     init {
-        loadTasksFromSharedPreferences()
+        fetchTasks()
     }
 
-    private fun loadTasksFromSharedPreferences() {
+    fun fetchTasks() {
         val sharedPreferences = getApplication<Application>().getSharedPreferences("MyTasks", Context.MODE_PRIVATE)
         val allTasks = mutableListOf<TaskData>()
         for (entry in sharedPreferences.all) {

@@ -4,5 +4,6 @@ data class TaskData(
     val id: String = "",
     val name: String,
     val description: String,
-    val deadline: String
+    val deadline: String,
+    var isDone: Boolean = false
 )

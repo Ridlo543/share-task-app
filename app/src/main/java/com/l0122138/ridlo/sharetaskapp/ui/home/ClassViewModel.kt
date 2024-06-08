@@ -16,16 +16,24 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ClassViewModel(application: Application) : AndroidViewModel(application) {
-    internal val _classes = MutableLiveData<List<ClassData>>()
+    private val _classes = MutableLiveData<List<ClassData>>()
     val classes: LiveData<List<ClassData>> get() = _classes
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> get() = _loading
 
+
+    init {
+        fetchClasses()
+    }
+
     fun fetchClasses() {
         _loading.value = true
-        val sharedPreferences = getApplication<Application>().getSharedPreferences("MyClasses", Context.MODE_PRIVATE)
-        val classCodes = sharedPreferences.getStringSet("class_codes", mutableSetOf()) ?: mutableSetOf()
+        val sharedPreferences =
+            getApplication<Application>().getSharedPreferences("MyClasses", Context.MODE_PRIVATE)
+        val classCodes =
+            sharedPreferences.getStringSet("class_codes", mutableSetOf())?.toMutableSet()
+                ?: mutableSetOf()
 
         if (classCodes.isNotEmpty()) {
             val fetchedClasses = mutableListOf<ClassData>()
@@ -41,11 +49,17 @@ class ClassViewModel(application: Application) : AndroidViewModel(application) {
                                     _loading.value = false
                                 }
                             }
+                        } else {
+                            if (fetchedClasses.size == classCodes.size) {
+                                _loading.value = false
+                            }
                         }
                     }
 
                     override fun onFailure(call: Call<ClassData>, t: Throwable) {
-                        _loading.value = false
+                        if (fetchedClasses.size == classCodes.size) {
+                            _loading.value = false
+                        }
                     }
                 })
             }
@@ -53,6 +67,40 @@ class ClassViewModel(application: Application) : AndroidViewModel(application) {
             _classes.value = emptyList()
             _loading.value = false
         }
+    }
+
+    fun fetchClassByCode(code: String) {
+        _loading.value = true
+        val apiService = RetrofitClient.instance.create(ApiService::class.java)
+        apiService.getClassByCode(code).enqueue(object : Callback<ClassData> {
+            override fun onResponse(call: Call<ClassData>, response: Response<ClassData>) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        val updatedClasses = _classes.value.orEmpty().toMutableList()
+                        updatedClasses.add(it)
+                        _classes.value = updatedClasses
+                        saveClassCodeToSharedPreferences(code)
+                        _loading.value = false
+                    }
+                } else {
+                    _loading.value = false
+                }
+            }
+
+            override fun onFailure(call: Call<ClassData>, t: Throwable) {
+                _loading.value = false
+            }
+        })
+    }
+
+    private fun saveClassCodeToSharedPreferences(code: String) {
+        val sharedPreferences =
+            getApplication<Application>().getSharedPreferences("MyClasses", Context.MODE_PRIVATE)
+        val classCodes =
+            sharedPreferences.getStringSet("class_codes", mutableSetOf())?.toMutableSet()
+                ?: mutableSetOf()
+        classCodes.add(code)
+        sharedPreferences.edit().putStringSet("class_codes", classCodes).apply()
     }
 
     fun createClass(name: String) {
@@ -65,6 +113,7 @@ class ClassViewModel(application: Application) : AndroidViewModel(application) {
                         val updatedClasses = _classes.value.orEmpty().toMutableList()
                         updatedClasses.add(it)
                         _classes.value = updatedClasses
+                        saveClassCodeToSharedPreferences(it.code)
                         _loading.value = false
                     }
                 } else {
@@ -81,22 +130,23 @@ class ClassViewModel(application: Application) : AndroidViewModel(application) {
     fun updateClass(code: String, name: String) {
         _loading.value = true
         val apiService = RetrofitClient.instance.create(ApiService::class.java)
-        apiService.updateClass(code, ClassUpdateRequest(name)).enqueue(object : Callback<ClassData> {
-            override fun onResponse(call: Call<ClassData>, response: Response<ClassData>) {
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        fetchClasses() // Fetch updated list
+        apiService.updateClass(code, ClassUpdateRequest(name))
+            .enqueue(object : Callback<ClassData> {
+                override fun onResponse(call: Call<ClassData>, response: Response<ClassData>) {
+                    if (response.isSuccessful) {
+                        response.body()?.let {
+                            fetchClasses()
+                            _loading.value = false
+                        }
+                    } else {
                         _loading.value = false
                     }
-                } else {
+                }
+
+                override fun onFailure(call: Call<ClassData>, t: Throwable) {
                     _loading.value = false
                 }
-            }
-
-            override fun onFailure(call: Call<ClassData>, t: Throwable) {
-                _loading.value = false
-            }
-        })
+            })
     }
 
     fun deleteClass(code: String) {
@@ -108,6 +158,7 @@ class ClassViewModel(application: Application) : AndroidViewModel(application) {
                     val updatedClasses = _classes.value.orEmpty().toMutableList()
                     updatedClasses.removeAll { it.code == code }
                     _classes.value = updatedClasses
+                    removeClassCodeFromSharedPreferences(code)
                     _loading.value = false
                 } else {
                     _loading.value = false
@@ -118,5 +169,15 @@ class ClassViewModel(application: Application) : AndroidViewModel(application) {
                 _loading.value = false
             }
         })
+    }
+
+    private fun removeClassCodeFromSharedPreferences(code: String) {
+        val sharedPreferences =
+            getApplication<Application>().getSharedPreferences("MyClasses", Context.MODE_PRIVATE)
+        val classCodes =
+            sharedPreferences.getStringSet("class_codes", mutableSetOf())?.toMutableSet()
+                ?: mutableSetOf()
+        classCodes.remove(code)
+        sharedPreferences.edit().putStringSet("class_codes", classCodes).apply()
     }
 }

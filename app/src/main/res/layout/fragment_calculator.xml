@@ -1,54 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:context=".ui.playground.CalculatorFragment">
 
     <EditText
         android:id="@+id/firstNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="First Number"
-        android:inputType="numberDecimal"/>
+        android:hint="@string/first_number"
+        android:inputType="numberDecimal"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/secondNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Second Number"
-        android:inputType="numberDecimal"/>
+        android:hint="@string/second_number"
+        android:inputType="numberDecimal"
+        android:autofillHints="" />
 
     <TextView
         android:id="@+id/result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Result"
-        android:textSize="18sp"/>
+        android:gravity="center"
+        android:text="@string/result"
+        android:textSize="24sp" />
 
     <Button
         android:id="@+id/btnAdd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Add"/>
+        android:text="@string/add" />
 
     <Button
         android:id="@+id/btnSubtract"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Subtract"/>
+        android:text="@string/subtract" />
 
     <Button
         android:id="@+id/btnMultiply"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Multiply"/>
+        android:text="@string/multiply" />
 
     <Button
         android:id="@+id/btnDivide"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Divide"/>
+        android:text="@string/divide" />
 </LinearLayout>

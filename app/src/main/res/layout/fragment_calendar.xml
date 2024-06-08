@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.calendar.CalendarFragment"
-    android:layout_marginBottom="70dp">
+    android:layout_marginBottom="70dp"
+    tools:context=".ui.calendar.CalendarFragment">
 
-    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-        android:id="@+id/calendarView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:mcv_showOtherDates="all"
-        app:mcv_selectionColor="@color/md_theme_primary"
-        android:contentDescription="@string/calendar_content_description" />
+        android:layout_height="wrap_content">
 
-</RelativeLayout>
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/calendar_content_description"
+            app:mcv_selectionColor="@color/md_theme_primary"
+            app:mcv_showOtherDates="all" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/taskCalendarRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/calendarView"
+            android:layout_marginTop="8dp" />
+    </RelativeLayout>
+</ScrollView>

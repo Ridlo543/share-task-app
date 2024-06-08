@@ -27,7 +27,10 @@ class ClassDetailViewModel(application: Application) : AndroidViewModel(applicat
     fun fetchTasks(classCode: String) {
         _loading.value = true
         apiService.getTasksByClassCode(classCode).enqueue(object : Callback<List<TaskData>> {
-            override fun onResponse(call: Call<List<TaskData>>, response: Response<List<TaskData>>) {
+            override fun onResponse(
+                call: Call<List<TaskData>>,
+                response: Response<List<TaskData>>
+            ) {
                 if (response.isSuccessful) {
                     _tasks.value = response.body()
                     saveTasksToSharedPreferences(classCode, response.body().orEmpty())
@@ -45,7 +48,8 @@ class ClassDetailViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     private fun saveTasksToSharedPreferences(classCode: String, tasks: List<TaskData>) {
-        val sharedPreferences = getApplication<Application>().getSharedPreferences("MyTasks", Context.MODE_PRIVATE)
+        val sharedPreferences =
+            getApplication<Application>().getSharedPreferences("MyTasks", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         val gson = Gson()
         val jsonTasks = gson.toJson(tasks)
@@ -55,12 +59,14 @@ class ClassDetailViewModel(application: Application) : AndroidViewModel(applicat
 
     fun addTask(classCode: String, name: String, description: String, deadline: String) {
         _loading.value = true
-        val taskData = TaskData(name = name, description = description, deadline = deadline)
+        val taskData =
+            TaskData(name = name, description = description, deadline = deadline, isDone = false)
 
         viewModelScope.launch {
             try {
                 val newTask = apiService.addTask(classCode, taskData)
                 _tasks.value = _tasks.value.orEmpty() + newTask
+                saveTasksToSharedPreferences(classCode, _tasks.value.orEmpty())
             } catch (e: Exception) {
                 // Handle error if needed
             } finally {
@@ -69,14 +75,29 @@ class ClassDetailViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    fun updateTask(taskId: String, classCode: String, name: String, description: String, deadline: String) {
+    fun updateTask(
+        taskId: String,
+        classCode: String,
+        name: String,
+        description: String,
+        deadline: String,
+        isDone: Boolean
+    ) {
         _loading.value = true
-        val taskData = TaskData(id = taskId, name = name, description = description, deadline = deadline)
+        val taskData =
+            TaskData(
+                id = taskId,
+                name = name,
+                description = description,
+                deadline = deadline,
+                isDone = isDone
+            )
 
         viewModelScope.launch {
             try {
                 val updatedTask = apiService.updateTask(classCode, taskId, taskData)
                 _tasks.value = _tasks.value?.map { if (it.id == taskId) updatedTask else it }
+                saveTasksToSharedPreferences(classCode, _tasks.value.orEmpty())
             } catch (e: Exception) {
                 // Handle error if needed
             } finally {
@@ -91,6 +112,7 @@ class ClassDetailViewModel(application: Application) : AndroidViewModel(applicat
             try {
                 apiService.deleteTask(classCode, taskId)
                 _tasks.value = _tasks.value?.filter { it.id != taskId }
+                saveTasksToSharedPreferences(classCode, _tasks.value.orEmpty())
             } catch (e: Exception) {
                 // Handle error if needed
             } finally {
