@@ -9,6 +9,7 @@
         android:id="@+id/navigation_home"
         android:name="com.l0122138.ridlo.sharetaskapp.ui.home.HomeFragment"
         android:label="@string/title_home"
+        app:defaultNavHost="true"
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_navigation_home_to_classDetailFragment"

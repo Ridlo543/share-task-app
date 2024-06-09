@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
@@ -32,7 +33,7 @@ class TaskAdapter(
         val taskName: TextView = itemView.findViewById(R.id.task_name)
         val taskDescription: TextView = itemView.findViewById(R.id.task_description)
         val taskDeadline: TextView = itemView.findViewById(R.id.task_deadline)
-        val moreOptionsTask: ImageView = itemView.findViewById(R.id.more_options_task)
+        val moreOptionsTask: Button = itemView.findViewById(R.id.more_options_task)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

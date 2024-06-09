@@ -1,13 +1,17 @@
 package com.l0122138.ridlo.sharetaskapp.ui.home
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -18,9 +22,13 @@ import com.github.clans.fab.FloatingActionMenu
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.l0122138.ridlo.sharetaskapp.MainActivity
 import com.l0122138.ridlo.sharetaskapp.R
 import com.l0122138.ridlo.sharetaskapp.adapter.ClassAdapter
 import com.l0122138.ridlo.sharetaskapp.model.ClassData
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class HomeFragment : Fragment(), ClassAdapter.OnClassActionListener {
     private lateinit var recyclerView: RecyclerView
@@ -30,17 +38,29 @@ class HomeFragment : Fragment(), ClassAdapter.OnClassActionListener {
     private lateinit var progressBar: com.google.android.material.progressindicator.CircularProgressIndicator
     private lateinit var classAdapter: ClassAdapter
     private lateinit var classViewModel: ClassViewModel
+    private lateinit var currentDateTime: TextView
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val updateTimeRunnable = object : Runnable {
+        override fun run() {
+            val current = Calendar.getInstance().time
+            val dateFormat = SimpleDateFormat("HH:mm:ss\nEEEE, dd MMMM yyyy", Locale.getDefault())
+            currentDateTime.text = dateFormat.format(current)
+            handler.postDelayed(this, 1000)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
-        recyclerView = view.findViewById(R.id.recyclerView)
+        recyclerView = view.findViewById(R.id.classRecyclerView)
         fabMenu = view.findViewById(R.id.fab_menu)
         fabAddClass = view.findViewById(R.id.fab_add_class)
         fabCreateClass = view.findViewById(R.id.fab_create_class)
         progressBar = view.findViewById(R.id.progressBar)
+        currentDateTime = view.findViewById(R.id.currentDateTime)
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         classAdapter = ClassAdapter(mutableListOf(), this)
@@ -53,6 +73,8 @@ class HomeFragment : Fragment(), ClassAdapter.OnClassActionListener {
         fabCreateClass.setOnClickListener {
             showCreateClassDialog()
         }
+
+        (activity as MainActivity).hideActionBar()
 
         return view
     }
@@ -71,6 +93,24 @@ class HomeFragment : Fragment(), ClassAdapter.OnClassActionListener {
         }
 
         classViewModel.fetchClasses()
+
+        handler.post(updateTimeRunnable)
+    }
+
+//    override fun onResume() {
+//        super.onResume()
+//        (activity as MainActivity).hideActionBar()
+//    }
+
+    override fun onPause() {
+        super.onPause()
+        (activity as MainActivity).showActionBar()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // prevent memory leaks
+        handler.removeCallbacks(updateTimeRunnable)
     }
 
     override fun onClassClicked(classData: ClassData) {
@@ -90,7 +130,6 @@ class HomeFragment : Fragment(), ClassAdapter.OnClassActionListener {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Enter Class Code")
 
-        // Inflate the custom layout using LayoutInflater
         val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_class, null)
         builder.setView(view)
 
@@ -115,7 +154,6 @@ class HomeFragment : Fragment(), ClassAdapter.OnClassActionListener {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Enter Class Name")
 
-        // Inflate the custom layout using LayoutInflater
         val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_create_class, null)
         builder.setView(view)
 

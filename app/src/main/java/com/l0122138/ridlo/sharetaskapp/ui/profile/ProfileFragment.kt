@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -16,10 +17,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.l0122138.ridlo.sharetaskapp.MainActivity
+import com.l0122138.ridlo.sharetaskapp.R
 import com.l0122138.ridlo.sharetaskapp.databinding.FragmentProfileBinding
 import java.io.File
 import java.io.FileOutputStream
@@ -43,6 +48,7 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -105,7 +111,12 @@ class ProfileFragment : Fragment() {
             val phone = binding.phoneEditText.text.toString()
 
             if (validateInputs(name, email, phone)) {
-                profileViewModel.saveProfileData(name, email, phone, profileViewModel.profileImageUri.value)
+                profileViewModel.saveProfileData(
+                    name,
+                    email,
+                    phone,
+                    profileViewModel.profileImageUri.value
+                )
                 Toast.makeText(requireContext(), "Profile saved", Toast.LENGTH_SHORT).show()
             }
         }
@@ -117,6 +128,16 @@ class ProfileFragment : Fragment() {
 
         applyTheme(getSavedTheme())
     }
+
+//    override fun onResume() {
+//        super.onResume()
+//        (activity as MainActivity).hideActionBar()
+//    }
+
+//    override fun onPause() {
+//        super.onPause()
+//        (activity as MainActivity).showActionBar()
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,23 +7,39 @@
     android:layout_marginBottom="70dp"
     tools:context=".ui.calendar.CalendarFragment">
 
-    <RelativeLayout
+    <ImageView
+        android:id="@+id/backgroundImage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background_image2" />
 
-        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-            android:id="@+id/calendarView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/calendar_content_description"
-            app:mcv_selectionColor="@color/md_theme_primary"
-            app:mcv_showOtherDates="all" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/taskCalendarRecyclerView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/calendarView"
-            android:layout_marginTop="8dp" />
-    </RelativeLayout>
-</ScrollView>
+            android:layout_height="wrap_content">
+
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/calendar_content_description"
+                app:mcv_selectionColor="@color/md_theme_primary"
+                app:mcv_showOtherDates="all" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/taskCalendarRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/calendarView"
+                android:layout_marginTop="8dp" />
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

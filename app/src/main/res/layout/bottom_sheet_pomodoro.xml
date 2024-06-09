@@ -8,16 +8,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="@string/pomodoro_explanation"
+        android:text="@string/pomodoro_info"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="16sp" />
-
-    <Button
-        android:id="@+id/closeButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/close" />
-
 </LinearLayout>

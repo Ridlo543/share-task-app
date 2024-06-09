@@ -1,9 +1,12 @@
 package com.l0122138.ridlo.sharetaskapp.util
 
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.l0122138.ridlo.sharetaskapp.R
@@ -31,13 +34,19 @@ class NotificationHelper(private val context: Context) {
     }
 
     fun sendTimerFinishedNotification() {
-        val notification = NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(R.drawable.baseline_timer_24_primary)
-            .setContentTitle("Timer Finished")
-            .setContentText("Your timer has finished.")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .build()
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            val notification = NotificationCompat.Builder(context, channelId)
+                .setSmallIcon(R.drawable.baseline_timer_24_primary)
+                .setContentTitle("Timer Finished")
+                .setContentText("Your timer has finished.")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .build()
 
-        NotificationManagerCompat.from(context).notify(notificationId, notification)
+            NotificationManagerCompat.from(context).notify(notificationId, notification)
+        }
     }
 }

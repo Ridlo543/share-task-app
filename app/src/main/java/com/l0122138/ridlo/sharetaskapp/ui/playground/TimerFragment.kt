@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.l0122138.ridlo.sharetaskapp.R
 import com.l0122138.ridlo.sharetaskapp.databinding.FragmentTimerBinding
 
 class TimerFragment : Fragment() {
@@ -28,6 +30,11 @@ class TimerFragment : Fragment() {
             if (inputTime != null && inputTime > 0) {
                 timerViewModel.startTimer(inputTime)
             }
+        }
+
+        // Tambahkan binding untuk tombol "Pelajari Teknik Pomodoro"
+        binding.pomodoroInfoButton.setOnClickListener {
+            showPomodoroInfoBottomSheet()
         }
 
         binding.playButton.setOnClickListener {
@@ -58,10 +65,19 @@ class TimerFragment : Fragment() {
         }
     }
 
+
     private fun formatTime(seconds: Long): String {
         val hours = seconds / 3600
         val minutes = (seconds % 3600) / 60
         val secs = seconds % 60
         return String.format("%02d:%02d:%02d", hours, minutes, secs)
     }
+
+    private fun showPomodoroInfoBottomSheet() {
+        val bottomSheetView = layoutInflater.inflate(R.layout.bottom_sheet_pomodoro, null)
+        val dialog = BottomSheetDialog(requireContext())
+        dialog.setContentView(bottomSheetView)
+        dialog.show()
+    }
+
 }

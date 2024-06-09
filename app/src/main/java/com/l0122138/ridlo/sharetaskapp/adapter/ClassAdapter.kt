@@ -3,15 +3,13 @@ package com.l0122138.ridlo.sharetaskapp.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.l0122138.ridlo.sharetaskapp.R
 import com.l0122138.ridlo.sharetaskapp.model.ClassData
-
-import android.view.MenuItem
-import android.widget.ImageView
-import android.widget.PopupMenu
-import androidx.cardview.widget.CardView
 
 class ClassAdapter(
     private var classList: MutableList<ClassData>,
@@ -27,11 +25,14 @@ class ClassAdapter(
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val className: TextView = itemView.findViewById(R.id.class_name)
         val classCode: TextView = itemView.findViewById(R.id.class_code)
-        val moreOptions: ImageView = itemView.findViewById(R.id.more_options)
+        val moreOptions: Button = itemView.findViewById(R.id.more_options)
 
         init {
             itemView.setOnClickListener {
-                listener.onClassClicked(classList[adapterPosition])
+                val position = absoluteAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onClassClicked(classList[position])
+                }
             }
         }
     }
@@ -56,8 +57,9 @@ class ClassAdapter(
 
     fun setData(newList: List<ClassData>) {
         classList.clear()
-        classList.addAll(newList)
-        notifyDataSetChanged()
+        classList.addAll(newList.sortedBy { it.name })
+        notifyItemRangeRemoved(0, classList.size)
+        notifyItemRangeInserted(0, classList.size)
     }
 
     private fun showPopupMenu(view: View, classData: ClassData) {

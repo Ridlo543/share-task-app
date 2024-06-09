@@ -10,9 +10,9 @@ class PlaygroundPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> CalculatorFragment()
-            1 -> TimerFragment()
-            else -> CalculatorFragment() // Default
+            0 -> TimerFragment()
+            1 -> CalculatorFragment()
+            else -> TimerFragment() // Default
         }
     }
 }

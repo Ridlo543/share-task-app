@@ -25,8 +25,8 @@ class PlaygroundFragment : Fragment() {
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when (position) {
-                0 -> "Kalkulator"
-                else -> "Timer"
+                0 -> "Timer"
+                else -> "Calculator"
             }
         }.attach()
 

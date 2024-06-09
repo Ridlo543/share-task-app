@@ -11,7 +11,8 @@
         android:id="@+id/inputTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter time in seconds"
+        android:autofillHints=""
+        android:hint="@string/enter_time_in_seconds"
         android:inputType="number" />
 
     <TextView
@@ -20,32 +21,39 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="16dp"
-        android:text="00:00:00"
+        android:text="@string/_00_00_00"
         android:textSize="24sp" />
 
     <Button
         android:id="@+id/startButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Start" />
+        android:text="@string/start" />
 
     <Button
         android:id="@+id/playButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:enabled="false"
-        android:text="Play" />
+        android:text="@string/play" />
 
     <Button
         android:id="@+id/pauseButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:enabled="false"
-        android:text="Pause" />
+        android:text="@string/pause" />
 
     <Button
         android:id="@+id/stopButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Stop" />
+        android:text="@string/stop" />
+
+    <Button
+        android:id="@+id/pomodoroInfoButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/pomodoro_info_button" />
+
 </LinearLayout>

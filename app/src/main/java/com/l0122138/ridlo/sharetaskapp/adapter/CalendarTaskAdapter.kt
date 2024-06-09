@@ -35,7 +35,7 @@ class CalendarTaskAdapter(private var tasks: List<TaskData>) :
 
     fun updateTasks(newTasks: List<TaskData>) {
         tasks = newTasks
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, tasks.size)
     }
 
     private fun formatDate(dateString: String): String {
