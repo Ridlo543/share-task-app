@@ -121,18 +121,21 @@
             android:id="@+id/changePhotoButton"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="@string/change_photo" />
+            android:text="@string/change_photo"
+            android:textColor="@color/md_theme_onPrimaryContainer" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/saveButton"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="@string/save_button" />
+            android:text="@string/save_button"
+            android:textColor="@color/md_theme_onPrimaryContainer" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/themeButton"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="@string/change_theme_button" />
+            android:text="@string/change_theme_button"
+            android:textColor="@color/md_theme_onPrimaryContainer" />
     </LinearLayout>
 </RelativeLayout>

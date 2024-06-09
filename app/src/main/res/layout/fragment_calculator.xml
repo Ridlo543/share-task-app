@@ -35,23 +35,27 @@
         android:id="@+id/btnAdd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/md_theme_onPrimaryContainer"
         android:text="@string/add" />
 
     <Button
         android:id="@+id/btnSubtract"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/md_theme_onPrimaryContainer"
         android:text="@string/subtract" />
 
     <Button
         android:id="@+id/btnMultiply"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/md_theme_onPrimaryContainer"
         android:text="@string/multiply" />
 
     <Button
         android:id="@+id/btnDivide"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/md_theme_onPrimaryContainer"
         android:text="@string/divide" />
 </LinearLayout>

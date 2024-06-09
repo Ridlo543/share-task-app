@@ -29,10 +29,8 @@ class MainActivity : AppCompatActivity() {
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if (isGranted) {
-            // Permission granted, you can proceed with notifications
             Toast.makeText(this, "Notification permission granted", Toast.LENGTH_SHORT).show()
         } else {
-            // Permission denied, notify the user about the importance of this permission
             AlertDialog.Builder(this)
                 .setTitle("Notification Permission Needed")
                 .setMessage("This app needs the Notification permission to notify you when the timer finishes. Please enable it in the app settings.")
@@ -75,6 +73,17 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.navigation_home,
+                R.id.navigation_calendar,
+                R.id.navigation_playground,
+                R.id.navigation_profile -> hideActionBar()
+
+                else -> showActionBar()
+            }
+        }
+
         checkNotificationPermission()
     }
 
@@ -89,7 +98,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 else -> {
-                    // Request the permission
                     requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
             }

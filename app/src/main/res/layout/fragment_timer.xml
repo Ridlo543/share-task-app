@@ -28,32 +28,37 @@
         android:id="@+id/startButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/start" />
+        android:text="@string/start"
+        android:textColor="@color/md_theme_onPrimaryContainer" />
 
     <Button
         android:id="@+id/playButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:enabled="false"
-        android:text="@string/play" />
+        android:text="@string/play"
+        android:textColor="@color/md_theme_onPrimaryContainer" />
 
     <Button
         android:id="@+id/pauseButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:enabled="false"
-        android:text="@string/pause" />
+        android:text="@string/pause"
+        android:textColor="@color/md_theme_onPrimaryContainer" />
 
     <Button
         android:id="@+id/stopButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/stop" />
+        android:text="@string/stop"
+        android:textColor="@color/md_theme_onPrimaryContainer" />
 
     <Button
         android:id="@+id/pomodoroInfoButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/pomodoro_info_button" />
+        android:text="@string/pomodoro_info_button"
+        android:textColor="@color/md_theme_onPrimaryContainer" />
 
 </LinearLayout>

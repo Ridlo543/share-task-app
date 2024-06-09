@@ -39,6 +39,7 @@ class HomeFragment : Fragment(), ClassAdapter.OnClassActionListener {
     private lateinit var classAdapter: ClassAdapter
     private lateinit var classViewModel: ClassViewModel
     private lateinit var currentDateTime: TextView
+    private lateinit var noTasksTextView: TextView
 
     private val handler = Handler(Looper.getMainLooper())
     private val updateTimeRunnable = object : Runnable {
@@ -61,6 +62,7 @@ class HomeFragment : Fragment(), ClassAdapter.OnClassActionListener {
         fabCreateClass = view.findViewById(R.id.fab_create_class)
         progressBar = view.findViewById(R.id.progressBar)
         currentDateTime = view.findViewById(R.id.currentDateTime)
+        noTasksTextView = view.findViewById(R.id.noTasksTextView)
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         classAdapter = ClassAdapter(mutableListOf(), this)
@@ -74,7 +76,7 @@ class HomeFragment : Fragment(), ClassAdapter.OnClassActionListener {
             showCreateClassDialog()
         }
 
-        (activity as MainActivity).hideActionBar()
+//        (activity as MainActivity).hideActionBar()
 
         return view
     }
@@ -86,6 +88,7 @@ class HomeFragment : Fragment(), ClassAdapter.OnClassActionListener {
 
         classViewModel.classes.observe(viewLifecycleOwner) { classes ->
             classAdapter.setData(classes)
+            noTasksTextView.visibility = if (classes.isEmpty()) View.VISIBLE else View.GONE
         }
 
         classViewModel.loading.observe(viewLifecycleOwner) { isLoading ->
@@ -97,15 +100,15 @@ class HomeFragment : Fragment(), ClassAdapter.OnClassActionListener {
         handler.post(updateTimeRunnable)
     }
 
-//    override fun onResume() {
+    //    override fun onResume() {
 //        super.onResume()
 //        (activity as MainActivity).hideActionBar()
 //    }
 
-    override fun onPause() {
-        super.onPause()
-        (activity as MainActivity).showActionBar()
-    }
+//    override fun onPause() {
+//        super.onPause()
+//        (activity as MainActivity).showActionBar()
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

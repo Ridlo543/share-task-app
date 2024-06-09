@@ -7,9 +7,21 @@
     android:layout_marginBottom="70dp"
     tools:context=".ui.calendar.CalendarFragment">
 
+    <TextView
+        android:id="@+id/titleCalendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginVertical="16dp"
+        android:text="@string/calendar"
+        android:textColor="@color/md_theme_onSurface"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/titleCalendar"
         android:clipToPadding="false">
 
         <RelativeLayout
