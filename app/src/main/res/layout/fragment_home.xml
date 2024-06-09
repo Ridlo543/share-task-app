@@ -19,7 +19,7 @@
             android:layout_height="200dp"
             android:contentDescription="@string/header"
             android:scaleType="centerCrop"
-            android:src="@drawable/header" />
+            android:src="@drawable/header_green" />
 
         <TextView
             android:id="@+id/currentDateTime"
@@ -43,14 +43,14 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/backgroundImage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/banner"
-        android:contentDescription="@null"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background_image_2" />
+<!--    <ImageView-->
+    <!--        android:id="@+id/backgroundImage"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout_below="@id/banner"-->
+    <!--        android:contentDescription="@null"-->
+    <!--        android:scaleType="centerCrop"-->
+    <!--        android:src="@drawable/background_image_2" />-->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -89,9 +89,9 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
-        app:menu_colorNormal="@color/md_theme_primary"
+        app:menu_colorNormal="@color/md_theme_primaryContainer"
         app:menu_colorPressed="@color/md_theme_primaryContainer"
-        app:menu_colorRipple="@color/md_theme_primary">
+        app:menu_colorRipple="@color/md_theme_primaryContainer">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_add_class"
@@ -99,9 +99,9 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/open_class"
             android:src="@drawable/baseline_menu_book_24"
-            app:fab_colorNormal="@color/md_theme_primary"
+            app:fab_colorNormal="@color/md_theme_primaryContainer"
             app:fab_colorPressed="@color/md_theme_primaryContainer"
-            app:fab_colorRipple="@color/md_theme_primary"
+            app:fab_colorRipple="@color/md_theme_primaryContainer"
             app:fab_label="Open Class" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -110,9 +110,9 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/create_class"
             android:src="@drawable/fab_add"
-            app:fab_colorNormal="@color/md_theme_primary"
+            app:fab_colorNormal="@color/md_theme_primaryContainer"
             app:fab_colorPressed="@color/md_theme_primaryContainer"
-            app:fab_colorRipple="@color/md_theme_primary"
+            app:fab_colorRipple="@color/md_theme_primaryContainer"
             app:fab_label="Create Class" />
     </com.github.clans.fab.FloatingActionMenu>
 </RelativeLayout>

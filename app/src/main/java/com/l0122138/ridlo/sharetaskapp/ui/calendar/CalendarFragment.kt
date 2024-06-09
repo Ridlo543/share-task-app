@@ -39,6 +39,8 @@ class CalendarFragment : Fragment() {
         taskRecyclerView.adapter = taskAdapter
         calendarViewModel = ViewModelProvider(this)[CalendarViewModel::class.java]
 
+        calendarView.addDecorator(TextColorDecorator(requireContext()))
+
         calendarViewModel.tasks.observe(viewLifecycleOwner) { tasks ->
             markTaskDeadlines(tasks)
             updateTaskList(calendarView.currentDate)
@@ -69,9 +71,13 @@ class CalendarFragment : Fragment() {
 
         calendarView.removeDecorators()
 
-        val color =
-            ContextCompat.getColor(requireContext(), R.color.md_theme_primary)
+        val color = ContextCompat.getColor(requireContext(), R.color.md_theme_primary)
         calendarView.addDecorator(EventDecorator(color, taskDates))
+
+        // Add TextColorDecorator only if current month is active
+        if (calendarView.currentDate.month == CalendarDay.today().month) {
+            calendarView.addDecorator(TextColorDecorator(requireContext()))
+        }
     }
 
     private fun updateTaskList(date: CalendarDay) {

@@ -10,6 +10,6 @@
         android:layout_height="wrap_content"
         android:text="@string/pomodoro_info"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
+        android:textColor="@color/md_theme_onSurface"
         android:textSize="16sp" />
 </LinearLayout>

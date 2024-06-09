@@ -11,9 +11,10 @@ import com.prolificinteractive.materialcalendarview.DayViewFacade
 class TextColorDecorator(context: Context) : DayViewDecorator {
 
     private val color: Int = ContextCompat.getColor(context, R.color.md_theme_onSurface)
+    private val currentDate: CalendarDay = CalendarDay.today() // Get current date
 
     override fun shouldDecorate(day: CalendarDay?): Boolean {
-        return true // Apply this decorator to all days
+        return day?.month == currentDate.month
     }
 
     override fun decorate(view: DayViewFacade?) {
