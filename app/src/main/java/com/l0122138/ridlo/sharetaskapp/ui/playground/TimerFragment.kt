@@ -32,7 +32,6 @@ class TimerFragment : Fragment() {
             }
         }
 
-        // Tambahkan binding untuk tombol "Pelajari Teknik Pomodoro"
         binding.pomodoroInfoButton.setOnClickListener {
             showPomodoroInfoBottomSheet()
         }
@@ -65,7 +64,6 @@ class TimerFragment : Fragment() {
         }
     }
 
-
     private fun formatTime(seconds: Long): String {
         val hours = seconds / 3600
         val minutes = (seconds % 3600) / 60
@@ -79,5 +77,4 @@ class TimerFragment : Fragment() {
         dialog.setContentView(bottomSheetView)
         dialog.show()
     }
-
 }

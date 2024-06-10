@@ -3,15 +3,12 @@ package com.l0122138.ridlo.sharetaskapp.ui.home
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -22,7 +19,6 @@ import com.github.clans.fab.FloatingActionMenu
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.l0122138.ridlo.sharetaskapp.MainActivity
 import com.l0122138.ridlo.sharetaskapp.R
 import com.l0122138.ridlo.sharetaskapp.adapter.ClassAdapter
 import com.l0122138.ridlo.sharetaskapp.model.ClassData
@@ -189,13 +185,15 @@ class HomeFragment : Fragment(), ClassAdapter.OnClassActionListener {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Update Class Name")
 
-        val input = EditText(requireContext())
-        input.inputType = InputType.TYPE_CLASS_TEXT
-        input.setText(classData.name)
-        builder.setView(input)
+        val view = layoutInflater.inflate(R.layout.dialog_update_class, null)
+//        val inputLayout = view.findViewById<TextInputLayout>(R.id.classNameInputLayout)
+        val inputEditText = view.findViewById<TextInputEditText>(R.id.classNameEditText)
+
+        inputEditText.setText(classData.name)
+        builder.setView(view)
 
         builder.setPositiveButton("Update") { dialog, _ ->
-            val updatedName = input.text.toString()
+            val updatedName = inputEditText.text.toString()
             if (updatedName.isNotEmpty()) {
                 classViewModel.updateClass(classData.code, updatedName)
             } else {

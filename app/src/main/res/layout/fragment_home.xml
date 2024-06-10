@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="70dp"
+    android:layout_marginBottom="16dp"
     tools:context="ui.home.HomeFragment">
 
     <RelativeLayout
@@ -43,19 +43,12 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <!--    <ImageView-->
-    <!--        android:id="@+id/backgroundImage"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        android:layout_below="@id/banner"-->
-    <!--        android:contentDescription="@null"-->
-    <!--        android:scaleType="centerCrop"-->
-    <!--        android:src="@drawable/background_image_2" />-->
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/banner"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:clipToPadding="false"
         android:translationY="-60dp">
 
@@ -63,19 +56,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingHorizontal="16dp">
 
             <TextView
                 android:id="@+id/noTasksTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="150dp"
                 android:gravity="center"
                 android:padding="16dp"
                 android:text="@string/add_a_class_to_get_started"
                 android:textColor="@color/md_theme_onSurface"
                 android:textSize="18sp"
-                android:layout_marginTop="150dp"
                 android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -101,7 +94,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="70dp"
         app:menu_colorNormal="@color/md_theme_primaryContainer"
         app:menu_colorPressed="@color/md_theme_primaryContainer"
         app:menu_colorRipple="@color/md_theme_primaryContainer">
