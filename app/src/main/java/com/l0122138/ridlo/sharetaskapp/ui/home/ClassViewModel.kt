@@ -22,7 +22,6 @@ class ClassViewModel(application: Application) : AndroidViewModel(application) {
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> get() = _loading
 
-
     init {
         fetchClasses()
     }

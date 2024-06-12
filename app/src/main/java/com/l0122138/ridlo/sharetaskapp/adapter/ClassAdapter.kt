@@ -1,5 +1,7 @@
 package com.l0122138.ridlo.sharetaskapp.adapter
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,15 +73,26 @@ class ClassAdapter(
                     listener.onUpdateClass(classData)
                     true
                 }
-
                 R.id.action_delete -> {
                     listener.onDeleteClass(classData)
                     true
                 }
-
+                R.id.share_action -> {
+                    shareClass(view.context, classData)
+                    true
+                }
                 else -> false
             }
         }
         popup.show()
+    }
+
+    private fun shareClass(context: Context, classData: ClassData) {
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "Join our class: ${classData.name} with code: ${classData.code}")
+            type = "text/plain"
+        }
+        context.startActivity(Intent.createChooser(shareIntent, "Share class via"))
     }
 }
