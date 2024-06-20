@@ -125,9 +125,6 @@ class ClassDetailFragment : Fragment(), TaskAdapter.TaskActionListener {
         showEditTaskDialog(task)
     }
 
-    override fun onDeleteTask(taskId: String, position: Int) {
-        showDeleteConfirmationDialog(taskId, position)
-    }
 
     override fun onMarkTaskAsDone(task: TaskData) {
         val updatedTask = task.copy(isDone = true)
@@ -270,6 +267,10 @@ class ClassDetailFragment : Fragment(), TaskAdapter.TaskActionListener {
             }
             .create()
             .show()
+    }
+
+    override fun onDeleteTask(taskId: String, position: Int) {
+        showDeleteConfirmationDialog(taskId, position)
     }
 
     private fun deleteTask(taskId: String, position: Int) {

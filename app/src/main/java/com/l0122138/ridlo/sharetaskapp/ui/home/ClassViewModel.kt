@@ -2,6 +2,7 @@ package com.l0122138.ridlo.sharetaskapp.ui.home
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -148,23 +149,33 @@ class ClassViewModel(application: Application) : AndroidViewModel(application) {
             })
     }
 
-    fun deleteClass(code: String) {
+    fun deleteClassFromList(code: String) {
+        val updatedClasses = _classes.value.orEmpty().toMutableList()
+        updatedClasses.removeAll { it.code == code }
+        _classes.value = updatedClasses
+        removeClassCodeFromSharedPreferences(code)
+    }
+
+    fun deleteClassFromDatabase(code: String) {
         _loading.value = true
         val apiService = RetrofitClient.instance.create(ApiService::class.java)
         apiService.deleteClass(code).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    val updatedClasses = _classes.value.orEmpty().toMutableList()
-                    updatedClasses.removeAll { it.code == code }
-                    _classes.value = updatedClasses
-                    removeClassCodeFromSharedPreferences(code)
+                    deleteClassFromList(code) // Update list after successful deletion from database
                     _loading.value = false
                 } else {
+                    // Handle unsuccessful response
+                    Log.e(
+                        "ClassViewModel",
+                        "Failed to delete class from database: ${response.errorBody()?.string()}"
+                    )
                     _loading.value = false
                 }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("ClassViewModel", "Error deleting class from database", t)
                 _loading.value = false
             }
         })

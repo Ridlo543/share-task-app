@@ -177,9 +177,6 @@ class HomeFragment : Fragment(), ClassAdapter.OnClassActionListener {
         showUpdateClassDialog(classData)
     }
 
-    override fun onDeleteClass(classData: ClassData) {
-        showDeleteClassConfirmationDialog(classData)
-    }
 
     private fun showUpdateClassDialog(classData: ClassData) {
         val builder = AlertDialog.Builder(requireContext())
@@ -206,17 +203,37 @@ class HomeFragment : Fragment(), ClassAdapter.OnClassActionListener {
         builder.show()
     }
 
+    override fun onDeleteClass(classData: ClassData) {
+        showDeleteClassConfirmationDialog(classData)
+    }
+
     private fun showDeleteClassConfirmationDialog(classData: ClassData) {
         val builder = MaterialAlertDialogBuilder(requireContext())
         builder.setTitle(getString(R.string.delete_class_confirmation_title))
         builder.setMessage(getString(R.string.delete_class_confirmation_message))
         builder.setPositiveButton(getString(R.string.delete)) { dialog, _ ->
-            classViewModel.deleteClass(classData.code)
+            showDeleteOptionDialog(classData)
             dialog.dismiss()
         }
-        builder.setNegativeButton(
-            getString(R.string.cancel)
-        ) { dialog, _ ->
+        builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.show()
+    }
+
+    private fun showDeleteOptionDialog(classData: ClassData) {
+        val options =
+            arrayOf(getString(R.string.delete_from_list), getString(R.string.delete_from_database))
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        builder.setTitle(getString(R.string.delete_class_options_title))
+        builder.setItems(options) { dialog, which ->
+            when (which) {
+                0 -> classViewModel.deleteClassFromList(classData.code)
+                1 -> classViewModel.deleteClassFromDatabase(classData.code)
+            }
+            dialog.dismiss()
+        }
+        builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
             dialog.dismiss()
         }
         builder.show()
